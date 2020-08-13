@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.liuxin.mapper.IRoleMapper">
+    <resultMap id="roleUserMap" type="com.liuxin.vo.RoleVo">
+        <id property="id" column="id" javaType="Integer"/>
+        <result property="roleName" column="role_name" javaType="String"/>
+        <result property="roleDesc" column="role_desc" javaType="String"/>
+
+        <collection property="user" ofType="User">
+            <id property="id" column="uid" javaType="Integer"></id>
+            <result property="username" column="username" javaType="String"/>
+            <result property="birthday" column="birthday" javaType="java.util.Date"/>
+            <result property="sex" column="sex" javaType="String"/>
+            <result property="address" column="address" javaType="String"/>
+        </collection>
+    </resultMap>
+
+    <select id="findRoleAndUser"  resultMap="roleUserMap">
+        select c.id,c.role_name,c.role_desc,a.id uid,a.username,a.birthday,a.sex,a.address
+        from role as c left join user_role as b on c.id=b.rid left join tab_user as a on b.uid=a.id
+    </select>
+</mapper>

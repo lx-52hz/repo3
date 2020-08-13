@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.liuxin.mapper.IUserMapper">
+
+    <resultMap id="userMap" type="com.liuxin.vo.UserVo">
+        <id property="id" column="id" javaType="Integer"/>
+        <result property="username" column="username" javaType="String"/>
+        <result property="birthday" column="birthday" javaType="java.util.Date"/>
+        <result property="sex" column="sex" javaType="String"/>
+        <result property="address" column="address" javaType="String"/>
+
+        <association property="account" javaType="com.liuxin.domain.Account">
+            <id property="id" column="id" javaType="Integer"></id>
+            <result property="uid" column="uid" javaType="Integer"/>
+            <result property="money" column="money" javaType="Double"/>
+        </association>
+    </resultMap>
+
+    <select id="findAll" resultType="User">
+        select * from tab_user;
+    </select>
+    
+    <select id="findUserByCondition" resultType="User">
+<!-- #  有效防止sql注入  select * from tab_user where username like '%${username}%'-->
+        select * from tab_user where username like "%"#{username}"%";
+    </select>
+
+    <select id="findAllUserAndAccount" resultType="com.liuxin.vo.UserVo" resultMap="userMap">
+        SELECT a.*,b.id,b.uid,b.money FROM tab_user as a  inner join account as b on a.id=b.UID
+    </select>
+
+    <select id="findUserByUid" resultType="com.liuxin.vo.UserVo" resultMap="userMap">
+        select a.*,b.id,b.uid,b.money FROM tab_user as a  inner join account as b on a.id=b.UID where uid=#{uid}
+    </select>
+
+
+    <resultMap id="userRoleMap" type="com.liuxin.vo.UserVo">
+        <id property="id" column="id" javaType="Integer"/>
+        <result property="username" column="username" javaType="String"/>
+        <result property="birthday" column="birthday" javaType="java.util.Date"/>
+        <result property="sex" column="sex" javaType="String"/>
+        <result property="address" column="address" javaType="String"/>
+
+        <collection property="roles" ofType="Role">
+            <id property="id" column="id" javaType="Integer"></id>
+            <result property="roleName" column="role_name" javaType="String"/>
+            <result property="roleDesc" column="role_desc" javaType="String"/>
+        </collection>
+    </resultMap>
+
+    <select id="findUserAndRole" resultType="com.liuxin.vo.UserVo" resultMap="userRoleMap">
+        select a.*,c.role_name,c.role_desc
+        from tab_user as a inner join user_role as b on a.id=b.uid inner join role as c on b.rid=c.id
+    </select>
+
+
+
+
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <properties resource="jdbc.properties"></properties>
+
+<!--    设置延时加载(懒加载)-->
+    <settings>
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <setting name="aggressiveLazyLoading" value="true"/>
+    </settings>
+
+<!--    简化实体类的书写-->
+    <typeAliases>
+        <package name="com.liuxin.domain"/>
+    </typeAliases>
+
+    <environments default="mysql">
+
+<!--        使用sql，配置环境-->
+        <environment id="mysql">
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+<!--    配置映射器-->
+    <mappers>
+<!--        指定配置文件的路径-->
+        <package name="com.liuxin.mapper"/>
+    </mappers>
+</configuration>
